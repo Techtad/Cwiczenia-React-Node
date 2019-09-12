@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <style></style>
+  </head>
+  <body>
+    <div id="react-app"></div>
+    <script type="text/babel">
+      var data = [
+        { id: 1, quantity: 1, name: "masło" },
+        { id: 2, quantity: 6, name: "mleko" },
+        { id: 3, quantity: 3, name: "chleb" }
+      ];
+
+      data.map(function(elem, i) {
+        console.log(i + " dowolne działanie dla każdego elementu tablicy data");
+      });
+
+      var array = data.map(function(elem) {
+        return elem.quantity;
+      });
+      console.log(array);
+
+      var array = data.map(function(elem) {
+        return elem;
+      });
+      console.log(array);
+
+      var array = data.map(function(elem) {
+        return elem.quantity * 2;
+      });
+      console.log(array);
+
+      var array = data.map(function(elem) {
+        return {
+          id: elem.id,
+          quantity: elem.quantity * 3,
+          name: elem.name
+        };
+      });
+      console.log(array);
+
+      data.filter(function(elem) {
+        console.log("dowolne działanie dla każdego elementu tablicy data");
+      });
+
+      data.filter(function(elem) {
+        console.log(elem > 1);
+      });
+
+      data.filter(function(elem) {
+        console.log(elem.name == "chleb");
+      });
+
+      var array = data.filter(function(elem) {
+        return elem.name == "chleb";
+      });
+      console.log(array);
+
+      var array = data.filter(function(elem) {
+        return elem.quantity > 1;
+      });
+      console.log(array);
+
+      var array = data.filter((elem, i) => {
+        return i % 2 == 0;
+      });
+      console.log(array);
+    </script>
+  </body>
+</html>
