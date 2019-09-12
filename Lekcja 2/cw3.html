@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+    <style>
+      #container {
+        border: 5px solid red;
+        padding: 10px;
+      }
+      .square {
+        width: 300px;
+        height: 300px;
+        border: 5px solid blue;
+        color: red;
+        text-align: center;
+        display: inline-block;
+        margin: 10px;
+      }
+      .button {
+        width: 75px;
+        height: 50px;
+        background-color: lightblue;
+        border: 3px solid blue;
+        user-select: none;
+        -moz-user-select: none;
+        text-align: center;
+        line-height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="react-app"></div>
+    <script type="text/babel">
+      var reactApp = document.getElementById("react-app");
+
+      class Food extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
+        }
+
+        render() {
+          return (
+            <div className="square">
+              <h1>{this.props.food}</h1>
+            </div>
+          );
+        }
+      }
+
+      class FoodList extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            foodTypes: ["masło", "mleko", "chleb", "dżem"],
+            currentFood: 0
+          };
+          this.buttonClicked = this.buttonClicked.bind(this);
+        }
+
+        buttonClicked() {
+          let newFood = Math.floor(Math.random() * this.state.foodTypes.length);
+          while (newFood == this.state.currentFood)
+            newFood = Math.floor(Math.random() * this.state.foodTypes.length);
+          this.setState({
+            currentFood: newFood
+          });
+        }
+
+        render() {
+          return (
+            <div id="container">
+              <div className="button" onClick={this.buttonClicked}>
+                klik
+              </div>
+              <Food food={this.state.foodTypes[this.state.currentFood]} />
+              <Food food={this.state.foodTypes[this.state.currentFood]} />
+              <Food food={this.state.foodTypes[this.state.currentFood]} />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<FoodList />, reactApp);
+    </script>
+  </body>
+</html>

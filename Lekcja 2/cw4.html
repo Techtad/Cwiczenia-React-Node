@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+    <style>
+      .square {
+        width: 300px;
+        height: 300px;
+        border: 5px solid blue;
+        color: red;
+        text-align: center;
+        display: inline-block;
+        margin: 10px;
+      }
+      .button {
+        width: 75px;
+        height: 50px;
+        background-color: lightblue;
+        border: 3px solid blue;
+        user-select: none;
+        -moz-user-select: none;
+        text-align: center;
+        line-height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="react-app"></div>
+    <script type="text/babel">
+      var reactApp = document.getElementById("react-app");
+
+      class Square extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { num: 5 };
+          this.buttonClicked = this.buttonClicked.bind(this);
+        }
+
+        buttonClicked() {
+          if (this.state.num > 1) this.setState({ num: this.state.num - 1 });
+          else this.setState({ num: "zero" });
+        }
+
+        render() {
+          return (
+            <div className="square">
+              <h1>{this.state.num}</h1>
+              <div className="button" onClick={this.buttonClicked}>
+                klik
+              </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <div>
+          <Square />
+          <Square />
+          <Square />
+        </div>,
+        reactApp
+      );
+    </script>
+  </body>
+</html>
