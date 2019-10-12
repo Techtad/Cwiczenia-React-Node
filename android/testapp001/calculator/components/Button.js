@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 
 class Button extends Component {
   constructor(props) {
@@ -9,13 +9,20 @@ class Button extends Component {
 
   render() {
     return (
-      <View style={style}>
-        <Text> {this.props.text} </Text>
-      </View>
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          backgroundColor: this.props.bgColor
+        }}
+        onPress={this.props.pressFunc}
+      >
+        <Text style={{ alignSelf: "center", color: "white", fontSize: 48 }}>
+          {this.props.text}
+        </Text>
+      </TouchableOpacity>
     );
   }
 }
-
-const style = {};
 
 export default Button;

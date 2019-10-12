@@ -10,15 +10,41 @@ class Display extends Component {
   render() {
     return (
       <View style={style}>
-        <Text>{this.props.text}</Text>
+        <Text
+          style={{
+            color: "darkgray",
+            fontSize: 48,
+            alignSelf: "flex-end",
+            marginLeft: 10,
+            marginRight: 5
+          }}
+          numberOfLines={1}
+          ellipsizeMode="head"
+        >
+          {this.props.previousEquation}
+        </Text>
+        <Text
+          style={{
+            color: "black",
+            fontSize: 48,
+            alignSelf: "flex-end",
+            marginLeft: 10,
+            marginRight: 5
+          }}
+          numberOfLines={1}
+          ellipsizeMode="head"
+        >
+          {this.props.currentEquation}
+        </Text>
       </View>
     );
   }
 }
 
 const style = {
-  backgroundColor: "#00bbbb",
-  height: 100 / 3 + "%"
+  backgroundColor: "#47ffcc",
+  height: `${100 / 3}%`,
+  justifyContent: "center"
 };
 
 export default Display;
