@@ -73,7 +73,10 @@ export default class App extends React.Component {
     let newWords = this.state.words;
     let lastWord = newWords[newWords.length - 1];
 
-    if (!isNaN(parseFloat(lastWord))) {
+    if (
+      /* !isNaN(parseFloat(lastWord)) */ lastWord &&
+      !opBtns.includes(lastWord)
+    ) {
       if (lastWord.endsWith("."))
         newWords[newWords.length - 1] = lastWord.substr(0, lastWord.length - 1);
 
@@ -146,10 +149,16 @@ export default class App extends React.Component {
         newWords[newWords.length - 1] = lastWord.substr(0, lastWord.length - 1);
 
       let equation = this.compileEquation(newWords);
+      let result;
+      try {
+        result = eval(equation).toString();
+      } catch {
+        result = "ERROR";
+      }
 
       this.setState(
         {
-          words: [eval(equation).toString()],
+          words: [result],
           previousEquation: equation + " ="
         },
         () => {
