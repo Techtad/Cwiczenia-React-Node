@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { KeyboardAvoidingView, View, Text } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import MyButton from "./MyButton";
+import Settings from "./Settings";
 
 class Main extends Component {
   constructor(props) {
@@ -10,57 +11,105 @@ class Main extends Component {
   }
 
   tryRegister() {
-    fetch("localhost:3000", {
+    fetch(Settings.serverAddress, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
+        action: "register",
         username: this.state.inUsername,
         password: this.state.inPassword
       })
-    }).then(resp => {
-      alert(resp);
-    });
+    })
+      .then(resp => {
+        return resp.json();
+      })
+      .then(respJson => {
+        if (respJson.success) {
+          fetch(Settings.serverAddress)
+            .then(resp => {
+              return resp.json();
+            })
+            .then(respJson => {
+              this.props.navigation.navigate("Users", { users: respJson });
+            });
+        } else {
+          alert(respJson.reason);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {
     return (
-      <View>
-        <TextInput
-          placeholder="username"
-          onChangeText={txt => {
-            this.setState({ inUsername: txt });
+      <View
+        style={{
+          justifyContent: "flex-end"
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: "#4caf50",
+            height: 280,
+            justifyContent: "center"
           }}
-          value={this.state.inUsername}
-        ></TextInput>
-        <TextInput
-          placeholder="password"
-          onChangeText={txt => {
-            this.setState({ inPassword: txt });
-          }}
-          value={this.state.inPassword}
-        ></TextInput>
-        <MyButton
-          title="register"
-          action={this.tryRegister.bind(this)}
-          style={{}}
-        />
+        >
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 36,
+              alignSelf: "center"
+            }}
+          >
+            Register Node App
+          </Text>
+        </View>
+        <KeyboardAvoidingView>
+          <TextInput
+            placeholder="username"
+            onChangeText={txt => {
+              this.setState({ inUsername: txt });
+            }}
+            textContentType={"username"}
+            value={this.state.inUsername}
+            style={{
+              fontSize: 18
+            }}
+          ></TextInput>
+          <TextInput
+            placeholder="password"
+            onChangeText={txt => {
+              this.setState({ inPassword: txt });
+            }}
+            secureTextEntry={true}
+            textContentType={"password"}
+            value={this.state.inPassword}
+            style={{
+              fontSize: 18
+            }}
+          ></TextInput>
+          <MyButton
+            title="register"
+            action={this.tryRegister.bind(this)}
+            style={{
+              alignSelf: "center"
+            }}
+            textStyle={{
+              textTransform: "uppercase",
+              fontWeight: "bold",
+              fontSize: 18
+            }}
+          />
+        </KeyboardAvoidingView>
       </View>
     );
   }
 
   static navigationOptions = {
-    // header: null,
-    title: "Register Node App",
-    headerStyle: {
-      backgroundColor: "#22bb22",
-      height: 320
-    },
-    headerTitleStyle: {
-      color: "#ffffff",
-      fontSize: 56
-    }
+    header: null
   };
 }
 

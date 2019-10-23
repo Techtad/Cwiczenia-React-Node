@@ -15,7 +15,10 @@ class MyButton extends Component {
         onPress={this.props.action}
         style={this.props.style || {}}
       >
-        <Text> {this.props.title || ""} </Text>
+        <Text style={this.props.textStyle || {}}>
+          {" "}
+          {this.props.title || ""}{" "}
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -24,7 +27,8 @@ class MyButton extends Component {
 MyButton.propTypes = {
   title: PropTypes.string,
   action: PropTypes.func.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  textStyle: PropTypes.object
 };
 
 export default MyButton;
