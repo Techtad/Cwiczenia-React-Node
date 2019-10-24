@@ -9,11 +9,18 @@ class ListItem extends Component {
 
   render() {
     return (
-      <View>
+      <View style={style.container}>
         <Text> ListItem </Text>
       </View>
     );
   }
 }
+
+const style = {
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-evenly"
+  }
+};
 
 export default ListItem;

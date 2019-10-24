@@ -3,19 +3,38 @@ import { View, Text } from "react-native";
 import MyButton from "./MyButton";
 import ListItem from "./ListItem";
 import { FlatList } from "react-native-gesture-handler";
+import * as Location from "expo-location";
+import { AsyncStorage } from "react-native";
 
 class List extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { loaded: false, markers: [] };
+    this.loadSavedMarkers();
   }
+
+  loadSavedMarkers = async function() {};
+
+  getPosition = async () => {
+    let pos = await Location.getCurrentPositionAsync({});
+    alert(JSON.stringify(pos, null, 4));
+  };
+
+  deleteMarkers = async function() {
+    this.setState({ markers: [] });
+    await AsyncStorage.clear(error => {
+      console.log(error);
+    });
+  };
 
   render() {
     return (
       <View style={style.container}>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <MyButton
-            action={() => {}}
+            action={() => {
+              this.getPosition();
+            }}
             title="Save current location"
             textStyle={style.buttonText}
             style={{ margin: 10, height: 42 }}
@@ -35,11 +54,13 @@ class List extends Component {
           textStyle={style.buttonText}
           style={{ margin: 10, height: 42 }}
         />
-        <FlatList
-          keyExtractor={(item, index) => item + index}
-          data={this.state.markers}
-          renderItem={item => <ListItem />}
-        />
+        {this.state.loaded ? (
+          <FlatList
+            keyExtractor={(item, index) => item + index}
+            data={this.state.markers}
+            renderItem={item => <ListItem />}
+          />
+        ) : null}
       </View>
     );
   }
