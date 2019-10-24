@@ -53,7 +53,7 @@ class Main extends Component {
         <View
           style={{
             backgroundColor: "#4caf50",
-            height: 280,
+            height: 420,
             justifyContent: "center"
           }}
         >
@@ -68,6 +68,7 @@ class Main extends Component {
           </Text>
         </View>
         <KeyboardAvoidingView>
+          <Text>username</Text>
           <TextInput
             placeholder="username"
             onChangeText={txt => {
@@ -79,6 +80,7 @@ class Main extends Component {
               fontSize: 18
             }}
           ></TextInput>
+          <Text>password</Text>
           <TextInput
             placeholder="password"
             onChangeText={txt => {

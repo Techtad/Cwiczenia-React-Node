@@ -70,8 +70,8 @@ const style = {
     marginTop: 20
   },
   img: {
-    width: 24,
-    height: 24
+    width: 36,
+    height: 36
   }
 };
 
