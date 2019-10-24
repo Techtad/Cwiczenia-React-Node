@@ -46,7 +46,7 @@ class Users extends Component {
               }.bind(this)}
             />
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item + index}
         />
       </View>
     );
