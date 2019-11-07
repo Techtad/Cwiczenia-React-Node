@@ -41,8 +41,8 @@ const style = {
     fontWeight: "bold"
   },
   img: {
-    width: 56,
-    height: 56
+    width: 64,
+    height: 64
   }
 };
 

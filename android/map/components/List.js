@@ -4,12 +4,12 @@ import MyButton from "./MyButton";
 import ListItem from "./ListItem";
 import { FlatList, Switch } from "react-native-gesture-handler";
 import * as Location from "expo-location";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 
 class List extends Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false, markers: [] };
+    this.state = { loaded: false, markers: [], waiting: false };
     this.loadSavedMarkers();
   }
 
@@ -20,6 +20,7 @@ class List extends Component {
   };
 
   savePosition = async () => {
+    this.setState({ waiting: true });
     let pos = await Location.getCurrentPositionAsync({});
     //alert(JSON.stringify(pos, null, 4));
     if (pos.coords.longitude && pos.coords.latitude) {
@@ -31,7 +32,7 @@ class List extends Component {
         title: "Marker #" + (newMarkers.length + 1),
         selected: false
       });
-      this.setState({ markers: newMarkers });
+      this.setState({ markers: newMarkers, waiting: false });
       AsyncStorage.setItem("markers", JSON.stringify(newMarkers));
     } else {
       alert(JSON.stringify(pos, null, 4));
@@ -39,7 +40,7 @@ class List extends Component {
   };
 
   deleteMarkers = async function() {
-    this.setState({ markers: [] });
+    this.setState({ markers: [], allSelected: false });
     AsyncStorage.setItem("markers", JSON.stringify([]));
   };
 
@@ -50,7 +51,14 @@ class List extends Component {
   }
 
   render() {
-    return (
+    return this.state.waiting ? (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator
+          style={{ flex: 1, alignSelf: "center" }}
+          size={100}
+        />
+      </View>
+    ) : (
       <View style={style.container}>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <MyButton

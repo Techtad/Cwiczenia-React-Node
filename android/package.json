@@ -10,11 +10,13 @@
   "dependencies": {
     "expo": "^35.0.1",
     "expo-cli": "^3.4.0",
+    "expo-media-library": "^7.0.0",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-maps": "^0.26.1",
-    "react-native-web": "^0.11.7"
+    "react-native-web": "^0.11.7",
+    "request-promise-native": "^1.0.8"
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0"
