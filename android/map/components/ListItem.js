@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
+import { Switch } from "react-native-gesture-handler";
 
 class ListItem extends Component {
   constructor(props) {
@@ -10,7 +11,21 @@ class ListItem extends Component {
   render() {
     return (
       <View style={style.container}>
-        <Text> ListItem </Text>
+        <Image
+          style={style.img}
+          source={require("../assets/marker_icon.png")}
+        />
+        <View>
+          <Text style={style.timestamp}>timestamp: {this.props.timestamp}</Text>
+          <Text> longitude: {this.props.longitude} </Text>
+          <Text> latitude: {this.props.latitude} </Text>
+        </View>
+        <Switch
+          value={this.props.selected}
+          onValueChange={value => {
+            this.props.selectFunc(this.props.index, value);
+          }}
+        />
       </View>
     );
   }
@@ -19,7 +34,15 @@ class ListItem extends Component {
 const style = {
   container: {
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
+    marginBottom: 10
+  },
+  timestamp: {
+    fontWeight: "bold"
+  },
+  img: {
+    width: 56,
+    height: 56
   }
 };
 

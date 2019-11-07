@@ -1,17 +1,36 @@
 import React, { Component } from "react";
-import { View } from "react-native";
-import { MapView } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 class MapScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    console.log(View);
-    console.log(MapView);
+    this.state = {
+      markers: this.props.navigation.state.params.markers
+    };
   }
 
   render() {
-    return <View style={style.container}></View>;
+    return (
+      <MapView
+        style={style.map}
+        initialRegion={{
+          latitude: this.state.markers[0].latitude,
+          longitude: this.state.markers[0].longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015
+        }}
+      >
+        {this.state.markers.map((m, i) => {
+          return (
+            <MapView.Marker
+              key={i}
+              coordinate={{ latitude: m.latitude, longitude: m.longitude }}
+              title={m.title}
+            />
+          );
+        })}
+      </MapView>
+    );
   }
 
   static navigationOptions = {
@@ -26,7 +45,9 @@ class MapScreen extends Component {
 }
 
 const style = {
-  container: {}
+  map: {
+    flex: 1
+  }
 };
 
 export default MapScreen;
