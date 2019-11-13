@@ -9,15 +9,20 @@ class PhotoItem extends Component {
 
   render() {
     let photoWidth = Dimensions.get("window").width / this.props.numColumns;
-    let photoHeight =
-      this.props.numColumns == 4
-        ? Dimensions.get("window").width / this.props.numColumns
-        : 100;
+    let photoHeight = this.props.numColumns == 4 ? photoWidth : 100;
 
     return (
-      <View style={{ width: photoWidth, height: photoHeight }}>
-        <Text> {this.props.uri} </Text>
-        <Image source={{ uri: this.props.uri }} />
+      <View
+        style={{
+          width: photoWidth,
+          height: photoHeight,
+          justifyContent: "center"
+        }}
+      >
+        <Image
+          style={{ width: "90%", height: "90%", alignSelf: "center" }}
+          source={{ uri: this.props.uri }}
+        />
       </View>
     );
   }
