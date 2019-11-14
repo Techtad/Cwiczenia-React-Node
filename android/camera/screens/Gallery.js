@@ -32,7 +32,7 @@ class Gallery extends Component {
     let obj = await MediaLibrary.getAssetsAsync({
       album: album,
       sortBy: MediaLibrary.SortBy.creationTime,
-      first: 1000,
+      first: 100,
       mediaType: "photo"
     });
     if (obj.assets) {
