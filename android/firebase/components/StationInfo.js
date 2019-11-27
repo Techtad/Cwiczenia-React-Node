@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 class StationInfo extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class StationInfo extends Component {
 
   render() {
     return (
-      <View>
+      <View style={style.container}>
         <Text> {this.props.name} </Text>
         <Text> {this.props.longitude} </Text>
         <Text> {this.props.latitude} </Text>
@@ -17,5 +17,14 @@ class StationInfo extends Component {
     );
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: 200,
+    borderWidth: 2,
+    borderColor: "black"
+  }
+});
 
 export default StationInfo;

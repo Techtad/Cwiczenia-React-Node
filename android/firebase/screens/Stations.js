@@ -22,8 +22,7 @@ class Stations extends Component {
     this.stations.on("value", elements => {
       //console.log(elements);
       let data = [];
-      elements.forEach(el => {
-        console.log(el["latitude"]);
+      elements.val().forEach(el => {
         data.push({
           name: el.stationName,
           latitude: el.latitude,
@@ -52,9 +51,9 @@ class Stations extends Component {
 
   render() {
     return (
-      <View style={{}}>
+      <View style={{ width: "100%" }}>
         <View style={{ alignSelf: "center" }}>
-          <Text>
+          <Text style={{ color: "blue" }}>
             {`Witaj ${this.props.navigation.state.params.userEmail}!`}
           </Text>
           <View style={{ flexDirection: "row" }}>
@@ -77,6 +76,7 @@ class Stations extends Component {
           </View>
           {this.state.dataLoaded ? (
             <FlatList
+              style={{ width: "100%" }}
               keyExtractor={(item, index) => item + index}
               data={this.state.data}
               renderItem={o => (
