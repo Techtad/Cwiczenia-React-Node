@@ -87,7 +87,7 @@ class Login extends Component {
       headerLeft: (
         <MyButton
           title="←"
-          style={{ width: 72, justifyContent: "center" }}
+          style={{ width: 72, justifyContent: "center", top: -12 }}
           textStyle={{ fontSize: 42, fontWeight: "bold", alignSelf: "center" }}
           action={() => {
             navigation.state.params.checkAuth();

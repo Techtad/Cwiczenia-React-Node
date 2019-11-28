@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import firebase from "firebase";
+import Colors from "../constants/Colors";
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -49,6 +50,17 @@ class Authorization extends Component {
       </View>
     );
   }
+
+  static navigationOptions = {
+    title: "Autoryzowanie...",
+    headerStyle: {
+      backgroundColor: Colors.tintColor
+    },
+    headerTitleStyle: {
+      color: "white"
+    },
+    headerLeft: null
+  };
 }
 
 export default Authorization;
