@@ -3,12 +3,15 @@ import { View, Text, Switch, Image } from "react-native";
 import { TouchableNativeFeedback } from "react-native";
 import Database from "../Database";
 import { Animated } from "react-native";
+import Colors from "../constants/Colors";
 
 class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      enabled: false,
+      time: props.time,
+      weekdays: props.weekdays,
+      enabled: props.enabled,
       weekdaysExtended: false,
       weekdaysHeight: new Animated.Value(0)
     };
@@ -16,16 +19,55 @@ class ListItem extends Component {
 
   toggleWeekdaysDisplay() {
     Animated.spring(this.state.weekdaysHeight, {
-      toValue: this.state.weekdaysExtended ? 0 : 56
+      toValue: this.state.weekdaysExtended ? 0 : 64,
+      bounciness: 0
     }).start();
     this.setState({ weekdaysExtended: !this.state.weekdaysExtended });
   }
 
+  toggleWeekday(num) {
+    let newWeekdays = this.state.weekdays;
+    newWeekdays[num] = !newWeekdays[num];
+    this.setState({ weekdays: newWeekdays }, () => {
+      this.modifyRecord();
+    });
+  }
+
+  modifyRecord() {
+    Database.modifyAlarm(
+      this.props.id,
+      this.state.time,
+      this.state.weekdays,
+      this.state.enabled
+    );
+  }
+
   render() {
     let weekdays = [];
-    let k = 0;
-    for (let day of ["PN", "WT", "ŚR", "CZ", "PT", "SB", "ND"]) {
-      weekdays.push(<Text key={k++}>{day}</Text>);
+    let days = ["PN", "WT", "ŚR", "CZ", "PT", "SB", "ND"];
+    for (let day = 0; day < 7; day++) {
+      let weekday = days[day];
+      weekdays.push(
+        <TouchableNativeFeedback
+          key={day}
+          background={TouchableNativeFeedback.Ripple(
+            "rgba(255,255,255,1)",
+            true
+          )}
+          onPress={() => this.toggleWeekday(day)}
+        >
+          <Text
+            style={{
+              padding: 10,
+              backgroundColor: this.state.weekdays[day]
+                ? Colors.tintColor
+                : "transparent"
+            }}
+          >
+            {weekday}
+          </Text>
+        </TouchableNativeFeedback>
+      );
     }
 
     return (
@@ -50,7 +92,11 @@ class ListItem extends Component {
           <Switch
             style={{}}
             value={this.state.enabled}
-            onValueChange={v => this.setState({ enabled: v })}
+            onValueChange={v =>
+              this.setState({ enabled: v }, () => {
+                this.modifyRecord();
+              })
+            }
           />
         </View>
         <View
@@ -63,10 +109,13 @@ class ListItem extends Component {
           }}
         >
           <TouchableNativeFeedback
-            background={TouchableNativeFeedback.Ripple("rgba(0,0,0,1)", true)}
+            background={TouchableNativeFeedback.Ripple(
+              "rgba(255,255,255,1)",
+              true
+            )}
             onPress={() => {
               Database.deleteAlarm(this.props.id);
-              this.props.reload();
+              this.props.remove();
             }}
           >
             <Image
@@ -79,7 +128,10 @@ class ListItem extends Component {
             />
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            background={TouchableNativeFeedback.Ripple("rgba(0,0,0,1)", true)}
+            background={TouchableNativeFeedback.Ripple(
+              "rgba(255,255,255,1)",
+              true
+            )}
             onPress={() => this.toggleWeekdaysDisplay()}
           >
             <Image

@@ -19,16 +19,25 @@ class AlarmList extends Component {
     });
   }
 
+  removeAlarmFromDisplay(id) {
+    this.setState({
+      alarms: this.state.alarms.filter(v => {
+        return v.id != id;
+      })
+    });
+  }
+
   render() {
     let listItems = [];
     this.state.alarms.map((v, i) => {
       listItems.push(
         <ListItem
-          key={i}
+          key={v.id}
           id={v.id}
           time={v.time}
-          weekdays={v.weekdays}
-          reload={this.loadAlarms.bind(this)}
+          weekdays={JSON.parse(v.weekdays)}
+          enabled={v.enabled == 1}
+          remove={this.removeAlarmFromDisplay.bind(this, v.id)}
         />
       );
     });
@@ -43,7 +52,8 @@ class AlarmList extends Component {
       >
         <ScrollView
           style={{
-            width: "75%"
+            width: "75%",
+            marginTop: 20
           }}
         >
           {listItems}
@@ -51,10 +61,10 @@ class AlarmList extends Component {
         <ImageButton
           style={{
             backgroundColor: Colors.tintColor,
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
             padding: 10,
-            borderRadius: 30,
+            borderRadius: 40,
             alignItems: "center",
             justifyContent: "center",
             alignSelf: "flex-end",

@@ -21,7 +21,7 @@ class Database {
   static createTable() {
     db.transaction(tx => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS `alarms` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `time` TEXT, `weekdays` TEXT);",
+        "CREATE TABLE IF NOT EXISTS `alarms` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `time` TEXT, `weekdays` TEXT, `enabled` BIT(1));",
         [],
         (tx, results) => {
           console.log(results);
@@ -33,11 +33,11 @@ class Database {
     });
   }
 
-  static addAlarm(time, weekdays) {
+  static addAlarm(time, weekdays, enabled) {
     db.transaction(tx => {
       tx.executeSql(
-        "INSERT INTO `alarms` (`time`, `weekdays`) VALUES (?, ?)",
-        [time, JSON.stringify(weekdays)],
+        "INSERT INTO `alarms` (`time`, `weekdays`, `enabled`) VALUES (?, ?, ?)",
+        [time, JSON.stringify(weekdays), enabled ? 1 : 0],
         (tx, results) => {
           console.log(results);
         },
@@ -53,6 +53,21 @@ class Database {
       tx.executeSql(
         "DELETE FROM `alarms` WHERE `id` = ?",
         [id],
+        (tx, results) => {
+          console.log(results);
+        },
+        (tx, error) => {
+          console.log(error);
+        }
+      );
+    });
+  }
+
+  static modifyAlarm(id, time, weekdays, enabled) {
+    db.transaction(tx => {
+      tx.executeSql(
+        "UPDATE `alarms` SET `time` = ?, `weekdays` = ?, `enabled` = ? WHERE `id` = ?",
+        [time, JSON.stringify(weekdays), enabled ? 1 : 0, id],
         (tx, results) => {
           console.log(results);
         },
