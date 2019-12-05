@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import MyButton from "../components/MyButton";
+import TextButton from "../components/TextButton";
 import Colors from "../constants/Colors";
 
 class Main extends Component {
@@ -18,10 +18,10 @@ class Main extends Component {
           <Text style={style.title}>Sqlite App</Text>
         </View>
         <View style={style.section}>
-          <MyButton
+          <TextButton
             title="START"
             action={() => {
-              this.props.navigation.navigate("");
+              this.props.navigation.navigate("AlarmList");
             }}
             style={style.button}
             textStyle={{ textAlign: "center", color: "white" }}
