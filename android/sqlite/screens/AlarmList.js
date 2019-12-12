@@ -5,9 +5,6 @@ import ImageButton from "../components/ImageButton";
 import Colors from "../constants/Colors";
 import Database from "../Database";
 import { Audio } from "expo-av";
-//import BackgroundTask from "react-native-background-task";
-
-//console.log(BackgroundTask);
 
 function twoDigiNumString(num) {
   return num < 10 ? "0" + num.toString() : num.toString();
