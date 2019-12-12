@@ -1,15 +1,44 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Vibration } from "react-native";
 import ListItem from "../components/ListItem";
 import ImageButton from "../components/ImageButton";
 import Colors from "../constants/Colors";
 import Database from "../Database";
+import { Audio } from "expo-av";
+//import BackgroundTask from "react-native-background-task";
+
+//console.log(BackgroundTask);
+
+function twoDigiNumString(num) {
+  return num < 10 ? "0" + num.toString() : num.toString();
+}
 
 class AlarmList extends Component {
   constructor(props) {
     super(props);
-    this.state = { alarms: [] };
+    this.state = { alarms: [], vibrating: false };
+  }
+
+  componentDidMount() {
+    this.audio = new Audio.Sound();
+    this.audio.loadAsync(require("../assets/audio/alarm.mp3")).then(
+      () => {
+        this.audio.setIsLoopingAsync(true).then(
+          () => {
+            this.interval = setInterval(this.checkForAlarm.bind(this), 1000);
+          },
+          () => {}
+        );
+      },
+      () => {}
+    );
     this.loadAlarms();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+    delete this.interval;
+    this.audio.stopAsync();
   }
 
   loadAlarms() {
@@ -27,6 +56,43 @@ class AlarmList extends Component {
     });
   }
 
+  checkForAlarm() {
+    let now = new Date();
+    let hours = twoDigiNumString(now.getHours());
+    let minutes = twoDigiNumString(now.getMinutes());
+    let time = `${hours}:${minutes}`;
+
+    let active = false;
+    this.state.alarms.map(alarm => {
+      //console.log(alarm.enabled, alarm.time, time);
+      if (alarm.enabled == 1 && alarm.time == time) active = true;
+    });
+
+    if (active) {
+      this.audio.playAsync();
+
+      if (!this.state.vibrating) Vibration.vibrate(500);
+      this.setState({ vibrating: true });
+      setTimeout(() => {
+        this.setState({ vibrating: false });
+      }, 1000);
+    } else {
+      this.audio.stopAsync();
+
+      Vibration.cancel();
+    }
+
+    //BackgroundTask.finish();
+  }
+
+  toggleAlarm(id, enabled) {
+    let newAlarms = this.state.alarms.slice();
+    for (let al of newAlarms) {
+      if (al.id == id) al.enabled = enabled;
+    }
+    this.setState({ alarms: newAlarms });
+  }
+
   render() {
     let listItems = [];
     this.state.alarms.map((v, i) => {
@@ -37,6 +103,7 @@ class AlarmList extends Component {
           time={v.time}
           weekdays={JSON.parse(v.weekdays)}
           enabled={v.enabled == 1}
+          toggleAlarm={this.toggleAlarm.bind(this)}
           remove={this.removeAlarmFromDisplay.bind(this, v.id)}
         />
       );

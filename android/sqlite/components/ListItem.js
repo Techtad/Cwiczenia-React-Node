@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Switch, Image } from "react-native";
+import { View, Text, Switch, Image, Vibration } from "react-native";
 import { TouchableNativeFeedback } from "react-native";
 import Database from "../Database";
 import { Animated } from "react-native";
@@ -94,6 +94,7 @@ class ListItem extends Component {
             value={this.state.enabled}
             onValueChange={v =>
               this.setState({ enabled: v }, () => {
+                this.props.toggleAlarm(this.props.id, v ? 1 : 0);
                 this.modifyRecord();
               })
             }

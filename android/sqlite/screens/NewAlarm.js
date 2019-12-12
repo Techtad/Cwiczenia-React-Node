@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Vibration } from "react-native";
 import ImageButton from "../components/ImageButton";
 import HourSelection from "../components/HourSelection";
 import MinuteSelection from "../components/MinuteSelection";
@@ -20,10 +20,12 @@ class NewAlarm extends Component {
   }
 
   hourSelectFunc(sender) {
+    Vibration.vibrate(50);
     this.setState({ hour: sender.props.val });
   }
 
   minuteSelectFunc(sender) {
+    Vibration.vibrate(50);
     this.setState({ minute: sender.props.val });
   }
 
