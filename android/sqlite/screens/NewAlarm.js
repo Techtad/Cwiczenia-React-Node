@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, Dimensions } from "react-native";
 import ImageButton from "../components/ImageButton";
-import TextButton from "../components/TextButton";
+import HourSelection from "../components/HourSelection";
+import MinuteSelection from "../components/MinuteSelection";
 import Database from "../Database";
 import { TouchableNativeFeedback } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
@@ -16,42 +17,14 @@ class NewAlarm extends Component {
       minute: "00",
       hourSelected: true
     };
-
-    this.hourBtns = [];
-    this.minuteBtns = [];
   }
 
-  componentWillMount() {
-    let center = { x: dims.width / 2, y: dims.height / 2 };
-    let radius = 50;
-    for (let i = 0; i < 12; i++) {
-      let angle = ((Math.PI * 2) / 12) * i;
-      this.hourBtns.push(
-        <TextButton
-          key={i}
-          style={{
-            fontSize: 32,
-            backgroundColor: Colors.tintColor,
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            justifyContent: "center",
-            alignItems: "center",
-            position: "relative",
-            left: Math.cos(angle) * 50,
-            top: Math.sin(angle) * 50
-          }}
-          onLayout={event => {
-            var { x, y, width, height } = event.nativeEvent.layout;
-            console.log(x, y, width, height);
-          }}
-          action={() => {
-            alert(i);
-          }}
-          title={i.toString()}
-        />
-      );
-    }
+  hourSelectFunc(sender) {
+    this.setState({ hour: sender.props.val });
+  }
+
+  minuteSelectFunc(sender) {
+    this.setState({ minute: sender.props.val });
   }
 
   render() {
@@ -68,7 +41,7 @@ class NewAlarm extends Component {
         <View
           style={{
             width: "100%",
-            marginTop: 100,
+            marginTop: 64,
 
             flexDirection: "row",
             justifyContent: "space-around",
@@ -113,17 +86,17 @@ class NewAlarm extends Component {
             </Text>
           </TouchableNativeFeedback>
         </View>
-        <View
-          style={{
-            width: 600,
-            height: 600,
-            position: "relative",
-            borderWidth: 1,
-            borderColor: "black"
-          }}
-        >
-          {this.hourBtns}
-        </View>
+        {this.state.hourSelected ? (
+          <HourSelection
+            hourSelectFunc={this.hourSelectFunc.bind(this)}
+            selectedHour={this.state.hour}
+          />
+        ) : (
+          <MinuteSelection
+            minuteSelectFunc={this.minuteSelectFunc.bind(this)}
+            selectedMinute={this.state.minute}
+          />
+        )}
         <ImageButton
           style={{
             backgroundColor: "red",
@@ -140,7 +113,7 @@ class NewAlarm extends Component {
           imgStyle={{ alignSelf: "center" }}
           action={() => {
             Database.addAlarm(
-              "00:00",
+              this.state.hour + ":" + this.state.minute,
               [false, false, false, false, false, false, false],
               false
             );
