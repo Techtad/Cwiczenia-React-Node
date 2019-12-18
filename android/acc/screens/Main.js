@@ -4,18 +4,20 @@ import Colors from "../constants/Colors";
 import { Accelerometer } from "expo-sensors";
 import TextButton from "../components/TextButton";
 
-const ws = new WebSocket("ws://192.168.1.77:1337");
+const ws = new WebSocket("ws://192.168.0.143:1337");
+var ControllerId = -1;
 
 //wysłanie danych na serwer przy podłączeniu klienta do serwera
 
 ws.onopen = () => {
-  //ws.send("klient się podłączył");
+  ws.send(JSON.stringify({ action: "registerController" }));
 };
 
 //odebranie danych z serwera i reakcja na nie, po sekundzie
 
 ws.onmessage = e => {
-  console.log(e.data);
+  let data = JSON.parse(e.data);
+  if (data.ControllerId != undefined) ControllerId = data.ControllerId;
   /* setTimeout(function() {
     ws.send("timestamp z klienta: " + Date.now());
   }, 1000); */
@@ -39,7 +41,13 @@ class Main extends Component {
     this.setState(data);
     if (this.state.sending)
       ws.send(
-        JSON.stringify({ x: this.state.x, y: this.state.y, z: this.state.z })
+        JSON.stringify({
+          action: "accdata",
+          controller: ControllerId,
+          x: this.state.x,
+          y: this.state.y,
+          z: this.state.z
+        })
       );
   }
 
@@ -80,10 +88,11 @@ class Main extends Component {
           }}
           textStyle={{ textAlign: "center", color: "white" }}
         />
-        <Text>
-          {" "}
-          x:{this.state.x} y:{this.state.y} z:{this.state.z}{" "}
-        </Text>
+        <View>
+          <Text>X: {this.state.x}</Text>
+          <Text>Y: {this.state.y}</Text>
+          <Text>Z: {this.state.z}</Text>
+        </View>
         <TextButton
           title={this.state.sending ? "SENDING" : "NOT SENDING"}
           action={this.toggleSending.bind(this)}
@@ -93,6 +102,30 @@ class Main extends Component {
             width: 128,
             height: 64,
             backgroundColor: this.state.sending ? "green" : "red"
+          }}
+          textStyle={{ textAlign: "center", color: "white" }}
+        />
+        <TextButton
+          title="FIRE"
+          action={() => {
+            if (this.state.sending)
+              ws.send(
+                JSON.stringify({
+                  action: "accdata",
+                  controller: ControllerId,
+                  x: this.state.x,
+                  y: this.state.y,
+                  z: this.state.z,
+                  fire: true
+                })
+              );
+          }}
+          style={{
+            alignSelf: "center",
+            justifyContent: "center",
+            width: 128,
+            height: 64,
+            backgroundColor: "red"
           }}
           textStyle={{ textAlign: "center", color: "white" }}
         />

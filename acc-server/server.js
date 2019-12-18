@@ -6,6 +6,8 @@ const wss = new WebSocket.Server({ port: 1337 }, () => {
 
 //reakcja na podłączenie klienta i odesłanie komunikatu
 
+var LastController = 0;
+
 wss.on("connection", (ws, req) => {
   //adres ip klienta
 
@@ -14,9 +16,13 @@ wss.on("connection", (ws, req) => {
   //reakcja na komunikat od klienta
 
   ws.on("message", message => {
+    let data = JSON.parse(message);
+    if (data.action == "registerController") {
+      ws.send(JSON.stringify({ ControllerId: LastController /* ++ */ }));
+    } else if (data.action == "accdata") {
+      sendToAllButMe(message, ws);
+    }
     console.log("serwer odbiera z klienta " + clientip + ": ", message);
-    /* ws.send("serwer odsyła do klienta -> " + message); */
-    sendToAllButMe(message, ws);
   });
 });
 

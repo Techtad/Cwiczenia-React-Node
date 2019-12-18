@@ -49,7 +49,8 @@ const style = StyleSheet.create({
   title: {
     alignSelf: "center",
     color: "white",
-    fontSize: 64
+    fontSize: 36,
+    textAlign: "center"
   },
   section: {
     height: "50%",
