@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+canvas {
+    display: block;
+}
+
+#ui {
+    position: fixed;
+    background-color: grey;
+    left: 20px;
+    top: 20px;
+    width: 160px;
+    padding: 5px;
+}
